@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="student-manager:war exploded2">
+    <output-path>$PROJECT_DIR$/out/artifacts/student_manager_war_exploded2</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="student-manager" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.16" />
+          <element id="library" level="module" name="Maven: com.alibaba:jconsole:1.8.0" module-name="student-manager" />
+          <element id="library" level="module" name="Maven: com.alibaba:tools:1.8.0" module-name="student-manager" />
+          <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.22" />
+          <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.30" />
+          <element id="library" level="project" name="Maven: commons-dbutils:commons-dbutils:1.7" />
+          <element id="library" level="project" name="jackson-annotations-2.12.3" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="student-manager/web/Web" />
+    </root>
+  </artifact>
+</component>
