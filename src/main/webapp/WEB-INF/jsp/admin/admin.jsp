@@ -34,7 +34,7 @@
           {"menuid":"4","icon":"","menuname":"基础信息管理",
             "menus":[
               {"menuid":"41","menuname":"年级列表","icon":"icon-world","url":"/grade?action=page"},
-              {"menuid":"42","menuname":"班级列表","icon":"icon-house","url":"../class/clazzList.html"},
+              {"menuid":"42","menuname":"班级列表","icon":"icon-house","url":"/clazz?action=page"},
               {"menuid":"43","menuname":"课程列表","icon":"icon-book-open","url":"/course?action=page"}
             ]
           },
