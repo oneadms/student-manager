@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * @author cnmgb
@@ -16,6 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Builder
+@Accessors(chain = true)
 public class Course {
   private Integer cid;
   private String courseName;
