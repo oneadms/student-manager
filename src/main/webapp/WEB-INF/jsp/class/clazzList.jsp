@@ -1,14 +1,15 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>班级列表</title>
-	<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="../easyui/css/demo.css">
-	<script type="text/javascript" src="../easyui/jquery.min.js"></script>
-	<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../easyui/js/validateExtends.js"></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/easyui/css/demo.css">
+	<script type="text/javascript" src="${pageContext.request.contextPath}/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/easyui/js/validateExtends.js"></script>
 	<script type="text/javascript">
 	$(function() {	
 		//datagrid初始化 
@@ -18,23 +19,23 @@
 	        border: true, 
 	        collapsible: false,//是否可折叠的 
 	        fit: true,//自动大小 
-	        method: "post",
-	        url:"ClazzServlet?method=ClazzDetailList&t="+new Date().getTime(),
-	        idField:'id', 
+	        method: "get",
+	        url:"clazz?action=data&t="+new Date().getTime(),
+	        idField:'cid',
 	        singleSelect: true,//是否单选 
 	        pagination: true,//分页控件 
 	        rownumbers: true,//行号 
-	        sortName: 'id',
-	        sortOrder: 'DESC', 
+	        sortName: 'cid',
+	        sortOrder: 'ASC',
 	        remoteSort: false,
-	        columns: [[  
+	        columns: [[
 				{field:'chk',checkbox: true,width:50},
- 		        {field:'id',title:'ID',width:50, sortable: true},    
- 		        {field:'name',title:'班级名称',width:200},
+ 		        {field:'cid',title:'ID',width:50, sortable: true},
+ 		        {field:'clazzName',title:'班级名称',width:200},
  		        {field:'grade',title:'所属年级',width:100, 
  		        	formatter: function(value,row,index){
  						if (row.grade){
- 							return row.grade.name;
+ 							return row.grade.gradeName;
  						} else {
  							return value;
  						}
@@ -45,9 +46,9 @@
 	    }); 
 	    //设置分页控件 
 	    var p = $('#dataList').datagrid('getPager'); 
-	    $(p).pagination({ 
-	        pageSize: 10,//每页显示的记录条数，默认为10 
-	        pageList: [10,20,30,50,100],//可以设置每页记录条数的列表 
+	    $(p).pagination({
+			pageSize: 2,//每页显示的记录条数，默认为10
+	        pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
 	        beforePageText: '第',//页数文本框前显示的汉字 
 	        afterPageText: '页    共 {pages} 页', 
 	        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录', 
@@ -62,20 +63,20 @@
         	if(selectRow == null){
             	$.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
             } else{
-            	var clazzid = selectRow.id;
+            	var clazzid = selectRow.cid;
             	$.messager.confirm("消息提醒", "将删除与班级相关的所有数据(包括学生)，确认继续？", function(r){
             		if(r){
             			$.ajax({
 							type: "post",
-							url: "ClazzServlet?method=DeleteClazz",
+							url: "clazz?action=deleteClazz",
 							data: {clazzid: clazzid},
-							success: function(msg){
-								if(msg == "success"){
-									$.messager.alert("消息提醒","删除成功!","info");
+							success: function({msg,code}){
+								if(code ===200){
+									$.messager.alert("消息提醒",msg,"info");
 									//刷新表格
 									$("#dataList").datagrid("reload");
 								} else{
-									$.messager.alert("消息提醒","删除失败!","warning");
+									$.messager.alert("消息提醒",msg,"warning");
 									return;
 								}
 							}
@@ -89,30 +90,35 @@
 	  	$("#gradeList").combobox({
 	  		width: "150",
 	  		height: "25",
-	  		valueField: "id",
-	  		textField: "name",
+	  		valueField: "gid",
+	  		textField: "gradeName",
 	  		multiple: false, //可多选
 	  		editable: false, //不可编辑
-	  		method: "post",
-	  		url: "GradeServlet?method=GradeList&t="+new Date().getTime(),
+	  		method: "get",
+	  		url: "grade?action=data_from_clazz&t="+new Date().getTime(),
 	  		onChange: function(newValue, oldValue){
-	  			$('#dataList').datagrid("options").queryParams = {gradeid: newValue};
+				if (newValue === -1) {
+					$('#dataList').datagrid("options").queryParams = {};
+				}else{
+
+					$('#dataList').datagrid("options").queryParams = {gid: newValue};
+				}
 	  			$('#dataList').datagrid("reload");
 	  		}
 	  	});
 	    
 	  	//添加年级下拉框
 	  	$("#add_gradeList").combobox({
-	  		valueField: "id",
-	  		textField: "name",
+	  		valueField: "gid",
+	  		textField: "gradeName",
 	  		multiple: false, //可多选
 	  		editable: false, //不可编辑
-	  		method: "post",
-	  		url: "GradeServlet?method=GradeList&t="+new Date().getTime(),
+	  		method: "get",
+	  		url: "grade?action=query&t="+new Date().getTime(),
 	  		onLoadSuccess: function(){
 		  		//默认选择第一条数据
 				var data = $(this).combobox("getData");
-				$(this).combobox("setValue", data[0].id);
+				$(this).combobox("setValue", data[0].gid);
 	  		}
 	  	});
 	  	
@@ -142,11 +148,11 @@
 							var gradeid = $("#add_gradeList").combobox("getValue");
 							$.ajax({
 								type: "post",
-								url: "ClazzServlet?method=AddClazz",
+								url: "/clazz?action=addClazz",
 								data: $("#addForm").serialize(),
-								success: function(msg){
-									if(msg == "success"){
-										$.messager.alert("消息提醒","添加成功!","info");
+								success: function({msg,code}){
+									if(code===200){
+										$.messager.alert("消息提醒",msg,"info");
 										//关闭窗口
 										$("#addDialog").dialog("close");
 										//清空原表格数据
@@ -157,7 +163,7 @@
 							  			$('#dataList').datagrid("reload");
 										
 									} else{
-										$.messager.alert("消息提醒","添加失败!","warning");
+										$.messager.alert("消息提醒",msg,"warning");
 										return;
 									}
 								}

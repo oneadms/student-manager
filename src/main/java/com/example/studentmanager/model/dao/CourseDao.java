@@ -1,17 +1,10 @@
 package com.example.studentmanager.model.dao;
 
 import com.example.studentmanager.model.dao.base.BaseDao;
-import com.example.studentmanager.model.dto.GradeDTO;
 import com.example.studentmanager.model.entity.Course;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import com.sun.org.apache.regexp.internal.RESyntaxException;
-import com.sun.org.apache.regexp.internal.REUtil;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
@@ -21,6 +14,8 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
  * @date 2022/4/7
  **/
 public class CourseDao extends BaseDao {
+
+  public static final String STRING = new String();
 
   public List<Course> queryAllCourse() {
     try {
@@ -61,7 +56,6 @@ public class CourseDao extends BaseDao {
         int row = queryRunner.update("delete from course where cid=?", cid);
         if (row > 0) {
           flag.set(true);
-
         }
       } catch (SQLException e) {
 

@@ -43,13 +43,13 @@ public class LoginServlet  extends HttpServlet {
       writer.write(res);
       return;
     }
-    int login = userService.login(account,password);
+    int login = userService.login(account,password,req);
 
     switch (login) {
       case LoginStatus.LOGIN_SUCCESS:
 
         res = objectMapper.writeValueAsString(Result.success("登录成功"));
-        req.getSession().setAttribute("username", account);
+
         break;
       case LoginStatus.USER_NOT_FOUND:
         res = objectMapper.writeValueAsString(Result.fail("用户名不存在"));

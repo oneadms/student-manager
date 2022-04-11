@@ -27,7 +27,7 @@
 	        pagination: false,//分页控件 
 	        rownumbers: true,//行号 
 	        sortName:'gid',
-	        sortOrder:'DESC', 
+	        sortOrder:'asc',
 	        remoteSort: false,
 	        columns: [[  
 				{field:'chk',checkbox: true,width:50},
@@ -66,20 +66,19 @@
         	if(selectRow == null){
             	$.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
             } else{
-            	var gradeid = selectRow.id;
+            	var gradeid = selectRow.gid;
             	$.messager.confirm("消息提醒", "将删除与年级相关的所有数据(包括班级,学生)，确认继续？", function(r){
             		if(r){
             			$.ajax({
-							type: "post",
-							url: "GradeServlet?method=DeleteGrade",
-							data: {gradeid: gradeid},
-							success: function(msg){
-								if(msg == "success"){
-									$.messager.alert("消息提醒","删除成功!","info");
+							type: "delete",
+							url: `/grade?gid=`+gradeid,
+							success: function({msg,code}){
+								if(code ===200){
+									$.messager.alert("消息提醒",msg,"info");
 									//刷新表格
 									$("#dataList").datagrid("reload");
 								} else{
-									$.messager.alert("消息提醒","删除失败!","warning");
+									$.messager.alert("消息提醒",msg,"warning");
 									return;
 								}
 							}
@@ -91,12 +90,12 @@
 	    
 	  	//课程下拉框
 	  	$("#add_courseList").combobox({
-	  		valueField: "id",
-	  		textField: "name",
+	  		valueField: "cid",
+	  		textField: "courseName",
 	  		multiple: true, //可多选
 	  		editable: false, //不可编辑
-	  		method: "post",
-	  		url: "CourseServlet?method=CourseList&t="+new Date().getTime(),
+	  		method: "get",
+	  		url: "/course?action=data&t="+new Date().getTime(),
 	  	});
 	    
 	  	//设置添加学生窗口
@@ -124,11 +123,11 @@
 						} else{
 							$.ajax({
 								type: "post",
-								url: "GradeServlet?method=AddGrade",
+								url: "grade?action=AddGrade",
 								data: $("#addForm").serialize(),
-								success: function(msg){
-									if(msg == "success"){
-										$.messager.alert("消息提醒","添加成功!","info");
+								success: function({code,msg}){
+									if(code===200){
+										$.messager.alert("消息提醒",msg,"info");
 										//关闭窗口
 										$("#addDialog").dialog("close");
 										//清空原表格数据
@@ -138,7 +137,7 @@
 										//重新刷新页面数据
 							  			$('#dataList').datagrid("reload");
 									} else{
-										$.messager.alert("消息提醒","添加失败!","warning");
+										$.messager.alert("消息提醒",msg,"warning");
 										return;
 									}
 								}

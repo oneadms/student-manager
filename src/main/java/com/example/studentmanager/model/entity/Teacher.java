@@ -1,24 +1,25 @@
 package com.example.studentmanager.model.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
  * @author cnmgb
  * @version 1.0
- * @date 2022/4/7
+ * @date 2022/4/11
  **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Builder
-@Accessors(chain = true)
-public class Course {
-  private Integer cid;
-  private String courseName;
+
+public class Teacher {
+  private Integer tid;
+  private String number;
+  private String name;
+  private String gender;
+  private String phone;
+  private String qq;
+
 }
