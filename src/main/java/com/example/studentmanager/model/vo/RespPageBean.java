@@ -20,5 +20,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class RespPageBean {
     private Long total;
-    private List<ClazzDTO> rows;
+    private List<?> rows;
 }
