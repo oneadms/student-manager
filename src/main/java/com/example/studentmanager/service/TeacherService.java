@@ -3,7 +3,6 @@ package com.example.studentmanager.service;
 import com.example.studentmanager.model.dao.TeacherDao;
 import com.example.studentmanager.model.vo.RespPageBean;
 import java.sql.SQLException;
-import javafx.print.PageLayout;
 
 /**
  * @author cnmgb
@@ -24,4 +23,6 @@ public class TeacherService extends BaseService<TeacherDao>{
     }
     return null;
   }
+// 根据tid删除教师
+
 }
